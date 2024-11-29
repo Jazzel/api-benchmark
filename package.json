@@ -1,0 +1,30 @@
+{
+  "name": "api-benchmark",
+  "version": "1.0.0",
+  "description": "A simple Node.js-based benchmarking tool to test API performance, bandwidth usage, and concurrency handling. This tool allows you to send a specified number of requests to an API endpoint, measure response times, and calculate the server's throughput under different load conditions.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "benchmarking",
+    "API testing",
+    "concurrency",
+    "performance testing",
+    "load testing",
+    "Node.js"
+  ],
+  "author": "Muhammad Jazzel Mehmood",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jazzel/api-benchmark"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
+}
