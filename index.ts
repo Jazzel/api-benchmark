@@ -12,24 +12,38 @@ interface BenchmarkResults {
   requestsPerSecond: string;
 }
 
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
 const testApi = async (
   url: string,
   totalRequests: number,
-  concurrency: number
+  concurrency: number,
+  method: HttpMethod,
+  data?: any // optional data for POST and PUT requests
 ): Promise<BenchmarkResults> => {
   let successCount = 0;
   let failedCount = 0;
   let totalTime = 0;
 
   const start = Date.now();
-  // Declare promises as an array of Promise<void>
   const promises: Promise<void>[] = [];
 
   for (let i = 0; i < totalRequests; i++) {
     const request = async () => {
       try {
         const reqStart = Date.now();
-        await axios.get(url);
+
+        // Use the appropriate method for the request
+        if (method === "GET") {
+          await axios.get(url);
+        } else if (method === "POST") {
+          await axios.post(url, data);
+        } else if (method === "PUT") {
+          await axios.put(url, data);
+        } else if (method === "DELETE") {
+          await axios.delete(url);
+        }
+
         successCount++;
         totalTime += Date.now() - reqStart;
       } catch (err) {
@@ -42,8 +56,7 @@ const testApi = async (
     // Handle concurrency
     if (promises.length >= concurrency) {
       await Promise.all(promises);
-      // Clear the array
-      promises.length = 0;
+      promises.length = 0; // Clear the array
     }
   }
 
@@ -57,8 +70,7 @@ const testApi = async (
     totalRequests,
     successfulRequests: successCount,
     failedRequests: failedCount,
-    // Total time in seconds
-    totalTime: (end - start) / 1000,
+    totalTime: (end - start) / 1000, // Total time in seconds
     averageResponseTime:
       successCount > 0 ? (totalTime / successCount).toFixed(2) : "N/A",
     requestsPerSecond: (successCount / ((end - start) / 1000)).toFixed(2),
@@ -68,9 +80,11 @@ const testApi = async (
 const runBenchmark = async (
   url: string,
   totalRequests: number,
-  concurrency: number
+  concurrency: number,
+  method: HttpMethod,
+  data?: any
 ): Promise<BenchmarkResults> => {
-  const results = await testApi(url, totalRequests, concurrency);
+  const results = await testApi(url, totalRequests, concurrency, method, data);
   return results;
 };
 

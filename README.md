@@ -50,20 +50,51 @@ import runBenchmark from "./api-benchmark/dist"; // Adjust the path as necessary
 Here’s an example of how to use the benchmarking tool:
 
 ```typescript
-const url = "http://localhost:3000/"; // Replace with your API URL
+const url = "http://localhost:3000/api"; // Replace with your API URL
 const totalRequests = 1000; // Total number of requests to send
 const concurrency = 50; // Number of concurrent requests to send
 
 const main = async () => {
   try {
-    const results = await runBenchmark(url, totalRequests, concurrency);
-    console.log(`--- Benchmark Results ---`);
-    console.log(`Total Requests: ${results.totalRequests}`);
-    console.log(`Successful Requests: ${results.successfulRequests}`);
-    console.log(`Failed Requests: ${results.failedRequests}`);
-    console.log(`Total Time Taken: ${results.totalTime} seconds`);
-    console.log(`Average Response Time: ${results.averageResponseTime} ms`);
-    console.log(`Requests Per Second: ${results.requestsPerSecond}`);
+    // Example for GET request
+    const getResults = await runBenchmark(
+      url,
+      totalRequests,
+      concurrency,
+      "GET"
+    );
+    console.log("GET Results:", getResults);
+
+    // Example for POST request
+    const postData = { key: "value" }; // Sample data for POST
+    const postResults = await runBenchmark(
+      url,
+      totalRequests,
+      concurrency,
+      "POST",
+      postData
+    );
+    console.log("POST Results:", postResults);
+
+    // Example for PUT request
+    const putData = { key: "newValue" }; // Sample data for PUT
+    const putResults = await runBenchmark(
+      url,
+      totalRequests,
+      concurrency,
+      "PUT",
+      putData
+    );
+    console.log("PUT Results:", putResults);
+
+    // Example for DELETE request
+    const deleteResults = await runBenchmark(
+      url,
+      totalRequests,
+      concurrency,
+      "DELETE"
+    );
+    console.log("DELETE Results:", deleteResults);
   } catch (error) {
     console.error("Error running benchmark:", error);
   }
