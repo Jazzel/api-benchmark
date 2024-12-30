@@ -19,6 +19,7 @@ const testApi = async (
   totalRequests: number,
   concurrency: number,
   method: HttpMethod,
+  headers?: any, // optional headers for the request
   data?: any // optional data for POST and PUT requests
 ): Promise<BenchmarkResults> => {
   let successCount = 0;
@@ -35,13 +36,13 @@ const testApi = async (
 
         // Use the appropriate method for the request
         if (method === "GET") {
-          await axios.get(url);
+          await axios.get(url, headers);
         } else if (method === "POST") {
-          await axios.post(url, data);
+          await axios.post(url, data, headers);
         } else if (method === "PUT") {
-          await axios.put(url, data);
+          await axios.put(url, data, headers);
         } else if (method === "DELETE") {
-          await axios.delete(url);
+          await axios.delete(url, headers);
         }
 
         successCount++;
@@ -82,6 +83,7 @@ const runBenchmark = async (
   totalRequests: number,
   concurrency: number,
   method: HttpMethod,
+  headers?: any,
   data?: any
 ): Promise<BenchmarkResults> => {
   const results = await testApi(url, totalRequests, concurrency, method, data);
